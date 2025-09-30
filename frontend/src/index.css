@@ -1,0 +1,129 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap");
+
+@import "tailwindcss";
+
+@theme {
+  --font-outfit: "Outfit", sans-serif;
+}
+
+@layer {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-[#FDFDFF] text-gray-600 font-outfit;
+  }
+}
+
+@layer utilities {
+  .container {
+    @apply px-4 mx-auto md:px-8 lg:px-14 2xl:max-w-screen-xl;
+  }
+
+  button {
+    @apply cursor-pointer;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-semibold leading-[1.2] text-balance text-gray-900;
+  }
+
+  h2 {
+    @apply text-2xl lg:text-3xl;
+  }
+
+  h3 {
+    @apply text-lg sm:text-xl text-white;
+  }
+
+  p {
+    @apply text-sm sm:text-base text-pretty;
+  }
+
+  .subtitle {
+    @apply text-red-500 font-semibold tracking-wider uppercase text-sm;
+  }
+
+  .section {
+    @apply pt-20 lg:pt-32 xl:pt-36;
+  }
+}
+
+@layer components {
+  .primary-btn {
+    @apply bg-sky-800 text-white px-5 rounded-xl py-2.5 lg:px-6 lg:py-3 hover:bg-cyan-900 transition-colors;
+  }
+}
+
+
+/* Body */
+.bg-pattern {
+  background-image: radial-gradient(#4A0D6622 2px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+
+/* Header */
+.navbar {
+  @apply lg:hidden absolute top-0 left-0 bg-neutral-50 w-full flex flex-col items-center justify-center h-[330px] py-4 -z-30 -translate-y-full transition-transform duration-300;
+}
+
+.navbar.active {
+  @apply translate-y-0;
+}
+
+.overlay {
+  @apply lg:hidden fixed top-0 left-0 w-full bg-gray-800/50 h-screen backdrop-blur-2xl -z-40 opacity-0 pointer-events-none duration-300 transition-opacity;
+}
+
+.overlay.active {
+  @apply opacity-100 pointer-events-auto;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(12deg);
+  }
+
+  50% {
+    transform: translateY(-8px) rotate(6deg);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+
+/* Services */
+.services-card:nth-child(2) {
+  @apply bg-blue-600;
+}
+
+.services-card:nth-child(3) {
+  @apply bg-purple-600;
+}
+
+
+/* WhyChooseUs */
+.card:nth-child(2) .card-icon {
+  @apply bg-[#68d58533]
+}
+
+.card:nth-child(3) .card-icon {
+  @apply bg-[#f64b4b33]
+}
+
+.card:nth-child(4) .card-icon {
+  @apply bg-[#161c2d33]
+}
+
+.card:is(:nth-child(1), :nth-child(3)) {
+  @apply ml-auto;
+}
