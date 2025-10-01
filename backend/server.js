@@ -11,16 +11,11 @@ const PORT = process.env.PORT || 5000;
 const API_URL = import.meta.env.VITE_API_URL;
 
 
-app.use(
-    cors({
-        origin: [
-            "http://localhost:5173",
-            "http://127.0.0.1:5173",
-            "https://beryfy1.netlify.app",
-        ],
-        credentials: true,
-    })
-);
+app.use(cors({
+  origin: ["https://beryfy1.netlify.app/"], // frontend domain
+  methods: ["GET", "POST"],
+  credentials: true
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
