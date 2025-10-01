@@ -12,7 +12,11 @@ const ContactForm = () => {
     const [submitStatus, setSubmitStatus] = useState('');
 
     // Directly hardcoding your backend URL instead of using .env
-    const API_URL = "https://beryfy1.onrender.com/api/contact";
+   const response = await fetch("https://beryfy1.onrender.com/api/contact", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(formData),
+});
 
     const handleChange = (e) => {
         const { name, value } = e.target;
