@@ -10,8 +10,9 @@ const ContactForm = () => {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState('');
-    const API_URL = import.meta.env.VITE_API_URL;
 
+    // Directly hardcoding your backend URL instead of using .env
+    const API_URL = "https://beryfy1.onrender.com/api/contact";
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -27,7 +28,7 @@ const ContactForm = () => {
         setSubmitStatus('');
 
         try {
-            const response = await fetch("https://beryfy1.onrender.com/api/contact", {
+            const response = await fetch(API_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
@@ -48,7 +49,6 @@ const ContactForm = () => {
             setIsSubmitting(false);
         }
     };
-
 
     return (
         <div className="bg-[#1a2329] rounded-2xl p-8 lg:p-12">
