@@ -1,31 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState('');
+  const [submitStatus, setSubmitStatus] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // Direct hardcoded backend URL
+  // ✅ Use deployed backend
   const API_URL = "https://beryfy1.onrender.com/api/contact";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitStatus('');
+    setSubmitStatus("");
+    setErrorMessage("");
 
     try {
       const response = await fetch(API_URL, {
@@ -36,15 +38,17 @@ const ContactForm = () => {
 
       const data = await response.json();
 
-      if (data.success) {
+      if (response.ok && data.success) {
         setSubmitStatus("success");
         setFormData({ name: "", email: "", subject: "", message: "" });
       } else {
         setSubmitStatus("error");
+        setErrorMessage(data.error || data.message || "Something went wrong.");
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("❌ Frontend error:", error);
       setSubmitStatus("error");
+      setErrorMessage("Network error. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -127,15 +131,15 @@ const ContactForm = () => {
           />
         </div>
 
-        {submitStatus === 'success' && (
+        {submitStatus === "success" && (
           <div className="bg-green-900/20 border border-green-500 text-green-400 px-4 py-3 rounded-lg">
-            Thank you! Your message has been sent successfully. We'll get back to you soon.
+            ✅ Thank you! Your message has been sent successfully. We'll get back to you soon.
           </div>
         )}
 
-        {submitStatus === 'error' && (
+        {submitStatus === "error" && (
           <div className="bg-red-900/20 border border-red-500 text-red-400 px-4 py-3 rounded-lg">
-            Sorry, there was an error sending your message. Please try again.
+            ❌ {errorMessage}
           </div>
         )}
 
@@ -144,7 +148,7 @@ const ContactForm = () => {
           disabled={isSubmitting}
           className="primary-btn w-full disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isSubmitting ? 'Sending...' : 'Send Message'}
+          {isSubmitting ? "Sending..." : "Send Message"}
         </button>
       </form>
     </div>
