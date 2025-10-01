@@ -12,15 +12,12 @@ const ContactForm = () => {
   const [submitStatus, setSubmitStatus] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  // ✅ Use deployed backend
+  // ✅ Update with your backend API (Render URL)
   const API_URL = "https://beryfy1.onrender.com/api/contact";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -68,72 +65,60 @@ const ContactForm = () => {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="name" className="block text-white text-sm font-medium mb-2">
-              Full Name
-            </label>
+            <label className="block text-white text-sm mb-2">Full Name</label>
             <input
               type="text"
-              id="name"
               name="name"
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 bg-[#161c20] border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors"
+              className="w-full px-4 py-3 bg-[#161c20] border border-gray-700 rounded-lg text-white"
               placeholder="Enter your full name"
             />
           </div>
           <div>
-            <label htmlFor="email" className="block text-white text-sm font-medium mb-2">
-              Email Address
-            </label>
+            <label className="block text-white text-sm mb-2">Email</label>
             <input
               type="email"
-              id="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 bg-[#161c20] border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors"
-              placeholder="Enter your email address"
+              className="w-full px-4 py-3 bg-[#161c20] border border-gray-700 rounded-lg text-white"
+              placeholder="Enter your email"
             />
           </div>
         </div>
 
         <div>
-          <label htmlFor="subject" className="block text-white text-sm font-medium mb-2">
-            Subject
-          </label>
+          <label className="block text-white text-sm mb-2">Subject</label>
           <input
             type="text"
-            id="subject"
             name="subject"
             value={formData.subject}
             onChange={handleChange}
             required
-            className="w-full px-4 py-3 bg-[#161c20] border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors"
-            placeholder="What's this about?"
+            className="w-full px-4 py-3 bg-[#161c20] border border-gray-700 rounded-lg text-white"
+            placeholder="Subject"
           />
         </div>
 
         <div>
-          <label htmlFor="message" className="block text-white text-sm font-medium mb-2">
-            Message
-          </label>
+          <label className="block text-white text-sm mb-2">Message</label>
           <textarea
-            id="message"
             name="message"
             value={formData.message}
             onChange={handleChange}
             required
             rows={5}
-            className="w-full px-4 py-3 bg-[#161c20] border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors resize-none"
-            placeholder="Tell us about your project..."
+            className="w-full px-4 py-3 bg-[#161c20] border border-gray-700 rounded-lg text-white resize-none"
+            placeholder="Write your message..."
           />
         </div>
 
         {submitStatus === "success" && (
           <div className="bg-green-900/20 border border-green-500 text-green-400 px-4 py-3 rounded-lg">
-            ✅ Thank you! Your message has been sent successfully. We'll get back to you soon.
+            ✅ Message sent successfully!
           </div>
         )}
 
@@ -146,7 +131,7 @@ const ContactForm = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="primary-btn w-full disabled:opacity-50 disabled:cursor-not-allowed"
+          className="primary-btn w-full disabled:opacity-50"
         >
           {isSubmitting ? "Sending..." : "Send Message"}
         </button>
