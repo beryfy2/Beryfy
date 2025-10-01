@@ -25,7 +25,7 @@ const ContactForm = () => {
         setSubmitStatus('');
 
         try {
-            const response = await fetch("https://beryfy.onrender.com/api/contact", {
+            const response = await fetch("https://beryfy1.onrender.com/api/contact", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
