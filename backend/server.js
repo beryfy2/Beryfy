@@ -1,80 +1,61 @@
 import express from "express";
-import nodemailer from "nodemailer";
-import bodyParser from "body-parser";
 import cors from "cors";
-import dotenv from "dotenv";
-
-dotenv.config();
+import nodemailer from "nodemailer";
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
-// ✅ Allow Netlify + local dev
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",        // local vite dev
-      "http://127.0.0.1:5173",        // local fallback
-      "https://beryfy1.netlify.app",  // ✅ deployed frontend
-    ],
-    methods: ["GET", "POST"],
-    credentials: true,
-  })
-);
+// ✅ Middleware
+app.use(cors({
+  origin: [
+    "http://localhost:5173",      // local dev
+    "https://your-netlify-site.netlify.app" // deployed frontend
+  ],
+  methods: ["POST"],
+  credentials: true
+}));
+app.use(express.json());
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// ✅ Reuse Nodemailer transporter with pooling
+// ✅ Create transporter ONCE (Brevo SMTP)
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,       // TLS
-  secure: false,   // must be false for 587
+  host: "smtp-relay.brevo.com",
+  port: 587,
+  secure: false,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: process.env.BREVO_USER, // usually your Brevo account email
+    pass: process.env.BREVO_KEY   // your Brevo API key
   },
-  tls: {
-    rejectUnauthorized: false, // avoid self-signed cert errors
-  },
+  pool: true,
+  maxConnections: 1,
+  maxMessages: Infinity,
 });
 
-// Test route
-app.get("/", (req, res) => {
-  res.json({ message: "✅ Beryfy Backend Server is running!" });
-});
-
-// Contact form route
+// ✅ Route to send email
 app.post("/api/contact", async (req, res) => {
   const { name, email, subject, message } = req.body;
 
-  if (!name || !email || !subject || !message) {
-    return res
-      .status(400)
-      .json({ success: false, message: "All fields are required" });
-  }
-
   try {
     await transporter.sendMail({
-      from: `"${name}" <${process.env.EMAIL_USER}>`,
+      from: `"${name}" <${process.env.BREVO_USER}>`,
+      to: process.env.BREVO_USER, // your inbox
       replyTo: email,
-      to: process.env.EMAIL_USER,
-      subject: `New Inquiry: ${subject}`,
-      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+      subject: subject || "New Contact Form Submission",
+      text: message,
+      html: `
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Message:</strong><br/>${message}</p>
+      `,
     });
 
-    res.json({ success: true, message: "✅ Message sent successfully!" });
+    res.json({ success: true, message: "Email sent successfully!" });
   } catch (err) {
-    console.error("❌ Error sending email:", err);
-    res.status(500).json({
-      success: false,
-      message: "Failed to send message. Please try again later.",
-      error: err.message, // ✅ helps debugging
-    });
+    console.error("❌ Email send failed:", err);
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
-// Start server
+// ✅ Server listen
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Backend running at http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
