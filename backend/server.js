@@ -13,7 +13,7 @@ app.use(
     cors({
         origin: [
             "http://localhost:5173",
-            "https://beryfy.netlify.app",
+            "https://beryfy2.netlify.app",
         ],
         credentials: true,
     })
