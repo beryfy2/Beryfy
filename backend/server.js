@@ -28,15 +28,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // ✅ Reuse Nodemailer transporter with pooling
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 465,
-  secure: true, // SSL
+  port: 587,       // TLS
+  secure: false,   // must be false for 587
   auth: {
-    user: process.env.EMAIL_USER, // Gmail address
-    pass: process.env.EMAIL_PASS, // 16-digit App Password
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
-  pool: true,           // ✅ keep connections alive
-  maxConnections: 5,    // up to 5 connections
-  maxMessages: 100,     // reuse connection for multiple emails
+  tls: {
+    rejectUnauthorized: false, // avoid self-signed cert errors
+  },
 });
 
 // Test route
